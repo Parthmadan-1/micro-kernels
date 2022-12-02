@@ -1,36 +1,43 @@
-#include "Math.h"
-#include "Linear_Regression.h"
-#include "matplotlibcpp.h"
+#include<iostream>
 
-namespace plt = matplotlibcpp;
 
-int main(){
-    
-    std::vector<float> X {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    std::vector<float> Y {1, 3, 2, 5, 7, 8, 8, 9, 10, 12};
-    float B_1;
-    float B_0;
-    std::vector<std::vector<float>> Z(10);
-    Z[0] = X;
-    Z[1] = Y;
+#define S 50
 
-    Linear_Regression <float,float> Reg_Class;
-    Reg_Class.fit(Z);
-    std::cout<<"\n";
-    std::cout<< "Estimated Coefficients:\nb_0 = { "<< Reg_Class.b_0 << " }  \
-          \nb_1 = { "<< Reg_Class.b_1 <<" }" <<std::endl;
-    
-    plt::plot(X,Y,{ {"label", "Original Data"}});
-    
-    std::vector<float> predicted;
-    for (int i =0; i< X.size(); i++)
-    {
-        predicted.push_back(Reg_Class.predict(X[i]));
-    }
-    
-    plt::plot(X,predicted,{ {"label", "Predicted Data"}});
-    plt::title("Linear Regression");
-    plt::legend();
-    plt::show();
-    return 0;
+using namespace std;
+int main()
+{
+ int n, i;
+ float x[S], y[S], sumX=0, sumX2=0, sumY=0, sumXY=0, a, b;
+
+ /* Input */
+ cout<<"How many data points? ";
+ cin>>n;
+
+ cout<<"Enter data:"<< endl;
+
+ for(i=1;i<=n;i++)
+ {
+  cout<<"x["<< i <<"] = ";
+  cin>>x[i];
+  cout<<"y["<< i <<"] = ";
+  cin>>y[i];
+ }
+
+ /* Calculating Required Sum */
+ for(i=1;i<=n;i++)
+ {
+  sumX = sumX + x[i];
+  sumX2 = sumX2 + x[i]*x[i];
+  sumY = sumY + y[i];
+  sumXY = sumXY + x[i]*y[i];
+ }
+ /* Calculating a and b */
+ b = (n*sumXY-sumX*sumY)/(n*sumX2-sumX*sumX);
+ a = (sumY - b*sumX)/n;
+
+ /* Displaying value of a and b */
+ cout<<"Calculated value of a is "<< a << "and b is "<< b << endl;
+ cout<<"Equation of best fit is: y = "<< a <<" + "<< b<<"x";
+
+ return(0);
 }
